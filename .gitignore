@@ -1,0 +1,9 @@
+node_modules/
+.env
+dist/
+build/
+*.log
+.DS_Store
+
+# Prisma generates this locally from schema.prisma — no need to commit it
+server/src/generated/
