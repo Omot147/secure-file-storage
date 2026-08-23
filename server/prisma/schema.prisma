@@ -1,0 +1,52 @@
+// This file is the single source of truth for your database structure.
+// Prisma reads it to generate both the SQL migrations AND a type-safe
+// JS client — so you never hand-write SQL for basic CRUD.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL") // read from .env, never hardcoded
+}
+
+model User {
+  id           String   @id @default(uuid())
+  email        String   @unique // Postgres UNIQUE constraint + auto index —
+                                  // enforced at the DB level, not just in app code
+  passwordHash String   @map("password_hash")
+  name         String
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  files File[] // one user has many files — the other half of the relation
+               // lives on File.ownerId below
+
+  @@map("users") // table is named "users" in Postgres, but the JS model is "User"
+}
+
+model File {
+  id               String   @id @default(uuid())
+  filename         String   // original filename the user uploaded
+  cloudinaryId     String   @map("cloudinary_id")   // Cloudinary's public_id — needed to delete/manage the asset later
+  url              String   // Cloudinary's secure delivery URL
+  size             Int      // bytes — used for validation and display
+  mimeType         String   @map("mime_type")
+  visibility       Visibility @default(PRIVATE)
+  shareToken       String?  @unique @map("share_token") // only set when a file is made public
+  createdAt        DateTime @default(now()) @map("created_at")
+
+  ownerId String @map("owner_id")
+  owner   User   @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  // onDelete: Cascade — if a user is deleted, their files go with them,
+  // so you never end up with orphaned rows pointing at a nonexistent owner
+
+  @@index([ownerId]) // every "get my files" query filters by ownerId —
+                      // this index is what keeps that query fast as the table grows
+  @@map("files")
+}
+
+enum Visibility {
+  PUBLIC
+  PRIVATE
+}
