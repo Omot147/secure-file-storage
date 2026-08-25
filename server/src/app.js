@@ -3,6 +3,7 @@ const cors = require('cors');
 const cookieParser = require('cookie-parser');
 
 const authRoutes = require('./routes/authRoutes');
+const fileRoutes = require('./routes/fileRoutes');
 
 const app = express();
 
@@ -24,7 +25,7 @@ app.use(cookieParser());
 app.get('/api/health', (req, res) => res.json({ status: 'ok', time: new Date().toISOString() }));
 
 app.use('/api/auth', authRoutes);
-// Day 2 adds: app.use('/api/files', fileRoutes);
+app.use('/api/files', fileRoutes);
 // Day 3 adds: app.use('/api/share', shareRoutes);
 
 // 404 handler — catches any request that didn't match a route above
