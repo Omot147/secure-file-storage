@@ -4,6 +4,7 @@ const cookieParser = require('cookie-parser');
 
 const authRoutes = require('./routes/authRoutes');
 const fileRoutes = require('./routes/fileRoutes');
+const shareRoutes = require('./routes/shareRoutes');
 
 const app = express();
 
@@ -20,6 +21,7 @@ app.get('/api/health', (req, res) => res.json({ status: 'ok', time: new Date().t
 
 app.use('/api/auth', authRoutes);
 app.use('/api/files', fileRoutes);
+app.use('/share', shareRoutes);
 
 app.use((req, res) => {
   res.status(404).json({ errors: ['Route not found'] });
