@@ -1,0 +1,86 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+:root {
+  --steel: #1C1F24;
+  --panel: #24282E;
+  --panel-raised: #2C3138;
+  --brass: #B08D57;
+  --brass-bright: #D4B37F;
+  --verdigris: #4E8A7A;
+  --alert: #B85450;
+  --paper: #EDEAE3;
+  --muted: #8A8F98;
+  --hairline: #363B42;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--steel);
+  background-image:
+    radial-gradient(ellipse at top, rgba(176, 141, 87, 0.06), transparent 60%);
+  color: var(--paper);
+  font-family: 'IBM Plex Sans', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, .font-display {
+  font-family: 'Fraunces', Georgia, serif;
+  letter-spacing: -0.01em;
+}
+
+.font-mono {
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+::selection {
+  background: var(--brass);
+  color: var(--steel);
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.plate {
+  background: linear-gradient(180deg, var(--panel-raised), var(--panel));
+  border: 1px solid var(--hairline);
+  border-radius: 6px;
+  position: relative;
+}
+.plate::before,
+.plate::after {
+  content: '';
+  position: absolute;
+  top: 8px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, var(--brass-bright), var(--brass) 70%);
+  opacity: 0.7;
+}
+.plate::before { left: 8px; }
+.plate::after { right: 8px; }
+
+.plate-number {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--brass);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
